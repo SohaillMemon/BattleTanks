@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "TankBarrel.h"
 #include "TankAimingComponent.h"
+#include "TankBarrel.h"
+#include "TankBurret.h"
 #include "Components/ActorComponent.h"
 #include "Kismet/GameplayStatics.h "
 
@@ -10,7 +11,7 @@ UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = true; //TODO should these really tick?
 
 	// ...
 }
@@ -19,6 +20,11 @@ UTankAimingComponent::UTankAimingComponent()
 void  UTankAimingComponent::SetBarrelReference(UTankBarrel*BarrelToSet)
 {
 	Barrel = BarrelToSet;
+}
+
+void UTankAimingComponent::SetBurretReference(UTankBurret * BurretToSet)
+{
+	Burret = BurretToSet;
 }
 
 
@@ -55,15 +61,25 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchingSpeed)
 		StartLocation,
 		HitLocation,
 		LaunchingSpeed,
-		ESuggestProjVelocityTraceOption::DoNotTrace
+		false,
+		0,
+		0,
+		ESuggestProjVelocityTraceOption::DoNotTrace //parameter must be present to prevent bug
 	);
 	
 	if (bHaveAimSolution)
 	{
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
+		auto Time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f:aim solution found"), Time);
 		//get location of barrel
 		//movethe barrel to cursor location
+	}
+	else
+	{
+		auto Time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f: no aim solution found"), Time);
 	}
 
 }
@@ -71,10 +87,12 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchingSpeed)
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 {
 	//work out difference between current barrel rotation and aimdirection
+	
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimRotator - BarrelRotator;
 	
-	Barrel->Elevate(5); //TODO replace magic number
-
+	Barrel->Elevate(DeltaRotator.Pitch);
+	Burret->Rotate(DeltaRotator.GetNormalized().Yaw);
 }
+
