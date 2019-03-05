@@ -44,4 +44,6 @@ private:
 	UPROPERTY(EditAnywhere, Category = Firing)
 	float LaunchingSpeed = 100000.f;
 	
+	UFUNCTION(BlueprintCallable, Category = Firing)
+	void Fire();
 };
