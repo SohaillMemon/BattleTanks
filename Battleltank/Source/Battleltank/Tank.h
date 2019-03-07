@@ -3,7 +3,7 @@
 #pragma once
 
 
-
+#include "Templates/Casts.h "
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
@@ -12,6 +12,7 @@
 class UTankBarrel; 
 class UTankAimingComponent;
 class UTankBurret;
+class AProjectile;
 
 UCLASS()
 class BATTLELTANK_API ATank : public APawn
@@ -25,6 +26,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetBurretReference(UTankBurret*BurretToSet);
+
+
+	UFUNCTION(BlueprintCallable, Category = Firing)
+	void Fire();
 
 private:
 	// Sets default values for this pawn's properties
@@ -43,7 +48,10 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Firing)
 	float LaunchingSpeed = 100000.f;
-	
-	UFUNCTION(BlueprintCallable, Category = Firing)
-	void Fire();
+
+	UPROPERTY(EditAnywhere, Category = Setup)
+	TSubclassOf<AProjectile>ProjectileBlueprint;
+
+	UTankBarrel*Barrel = nullptr; //local barrel reference for spawning projectile
+
 };
