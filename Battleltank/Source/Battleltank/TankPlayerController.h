@@ -30,15 +30,15 @@ private:
 	bool GetSightRayHitLocation(FVector& HitLocation) const;
 	
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float CrosshairXPoistion = 0.5;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float CrosshairYPosition = 0.3333;
 
 	bool GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float LineTraceRange = 100000;
 
 	bool GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const;
