@@ -9,7 +9,7 @@
 // Sets default values for this component's properties
 void UTankAimingComponent::Initialize(UTankBarrel*BarrelToSet, UTankBurret*BurretToSet)
 {
-	if (!BarrelToSet || !BurretToSet) { return; }
+	
 	Barrel = BarrelToSet;
 	Burret = BurretToSet;
 }
@@ -23,16 +23,6 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
-
-void  UTankAimingComponent::SetBarrelReference(UTankBarrel*BarrelToSet)
-{
-	Barrel = BarrelToSet;
-}
-
-void UTankAimingComponent::SetBurretReference(UTankBurret * BurretToSet)
-{
-	Burret = BurretToSet;
-}
 
 
 // Called when the game starts
@@ -85,6 +75,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchingSpeed)
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 {
+	if (!Burret || !Barrel) { return; }
 	//work out difference between current barrel rotation and aimdirection
 	
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();

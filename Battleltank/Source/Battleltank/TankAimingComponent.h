@@ -26,8 +26,6 @@ class BATTLELTANK_API UTankAimingComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UTankAimingComponent();
-	void SetBarrelReference(UTankBarrel*BarrelToSet);
-	void SetBurretReference(UTankBurret*BurretToSet);
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialize(UTankBarrel*BarrelToSet, UTankBurret*BurretToSet);
