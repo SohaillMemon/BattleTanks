@@ -7,6 +7,13 @@
 #include "Kismet/GameplayStatics.h "
 
 // Sets default values for this component's properties
+void UTankAimingComponent::Initialize(UTankBarrel*BarrelToSet, UTankBurret*BurretToSet)
+{
+	if (!BarrelToSet || !BurretToSet) { return; }
+	Barrel = BarrelToSet;
+	Burret = BurretToSet;
+}
+
 UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
