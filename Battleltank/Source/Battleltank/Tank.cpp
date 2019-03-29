@@ -18,12 +18,16 @@ ATank::ATank()
 
 }
 
-
+void ATank::BeginPlay()
+{
+	Super::BeginPlay(); //needed for BP Begin Play to Run
+}
 
 
 
 void ATank::AimAt(FVector HitLocation)
 {
+	if (!TankAimingComponent) { return; }
 	TankAimingComponent->AimAt(HitLocation, LaunchingSpeed);
 	
 }
