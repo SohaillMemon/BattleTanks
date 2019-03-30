@@ -29,7 +29,6 @@ UTankAimingComponent::UTankAimingComponent()
 void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
 	// ...
 	
 }
@@ -43,7 +42,7 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	// ...
 }
 
-void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchingSpeed)
+void UTankAimingComponent::AimAt(FVector HitLocation)
 {
 	if (!ensure(Barrel)) { return; }
 	FVector OutLaunchVelocity(0);
@@ -77,12 +76,14 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 {
 	
 	//work out difference between current barrel rotation and aimdirection
-	if (ensure(Barrel) || ensure(Burret)) { return; }
+	if (!ensure(Barrel) || !ensure(Burret)) { return; }
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimRotator - BarrelRotator;
 	
 	Barrel->Elevate(DeltaRotator.Pitch);
 	Burret->Rotate(DeltaRotator.GetNormalized().Yaw);
+
+
 }
 
