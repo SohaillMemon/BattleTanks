@@ -1,12 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Tank.h"
-#include "TankBurret.h"
-#include "TankBarrel.h"
-#include "Projectile.h"
-
-
-
 
 
 // Sets default values
@@ -24,23 +18,3 @@ void ATank::BeginPlay()
 }
 
 
-void ATank::Fire()
-{
-	if (!ensure(Barrel)) { return; }
-	bool isReloded = (FPlatformTime::Seconds() - LastFireTime) > ReloadingSpeed;
-
-	if ( isReloded)
-	{
-
-		// spawn fire projectile at socket location of barrel
-		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
-			ProjectileBlueprint,
-			Barrel->GetSocketLocation(FName("Projectile")),
-			Barrel->GetSocketRotation(FName("Projectile"))
-			);
-
-		Projectile->LaunchProjectile(LaunchingSpeed);
-		LastFireTime = FPlatformTime::Seconds();
-	}
- 
-}

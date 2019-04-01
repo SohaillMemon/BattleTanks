@@ -11,7 +11,6 @@
 // forward declaration
 class UTankBarrel; 
 class UTankBurret;
-class AProjectile;
 
 
 UCLASS()
@@ -21,8 +20,6 @@ class BATTLELTANK_API ATank : public APawn
 
 public:
 
-	UFUNCTION(BlueprintCallable, Category = "Firing")
-	void Fire();
 
 private:
 	// Sets default values for this pawn's properties
@@ -33,20 +30,5 @@ private:
 private:	
 	
 	// Called to bind functionality to input
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-	TSubclassOf<AProjectile>ProjectileBlueprint;
 
-	//TODO remove once it is moved to aiming component
-	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	float LaunchingSpeed = 4000.f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	float ReloadingSpeed = 3;
-
-
-	UTankBarrel*Barrel = nullptr; //local barrel reference for spawning projectile //TODO remove
-
-
-	double LastFireTime = 0;
 };
