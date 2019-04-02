@@ -22,27 +22,48 @@ UTankAimingComponent::UTankAimingComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true; //TODO should these really tick?
 
-	// ...
+
+	//....
 }
 
-
-
-// Called when the game starts
 void UTankAimingComponent::BeginPlay()
 {
-	Super::BeginPlay();
+
+	LastFireTime = FPlatformTime::Seconds();
 	// ...
-	
+
 }
 
-
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	if ((FPlatformTime::Seconds() - LastFireTime) < ReloadingSpeed)
+	{
+		FiringState = EFiringState::Reloading;
+	}
+	else if(IsBarrelMoving())
+	{
 
-	// ...
+		FiringState = EFiringState::Aiming;
+		
+	}
+	else
+	{
+		FiringState = EFiringState::Locked;
+	}
 }
+
+bool UTankAimingComponent::IsBarrelMoving()
+{
+	if (!ensure(Barrel)) { return false; }
+	auto BarrelForward = Barrel->GetForwardVector();
+	return !BarrelForward.Equals(AimDirection, 0.01); //vectors are not equal
+
+}
+
+// Called when the game starts
+
+
+
 
 void UTankAimingComponent::AimAt(FVector HitLocation)
 {
@@ -67,7 +88,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 	
 	if (bHaveAimSolution)
 	{
-		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
 		
 	}
@@ -91,12 +112,13 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 
 void UTankAimingComponent::Fire()
 {
-	if (!ensure(Barrel && ProjectileBlueprint)) { return; }
-	bool isReloded = (FPlatformTime::Seconds() - LastFireTime) > ReloadingSpeed;
+	
+	
 
-	if (isReloded)
+	if (FiringState != EFiringState::Reloading)
 	{
-
+		if (!ensure(Barrel)) { return; }
+		if (!ensure(ProjectileBlueprint)) { return; }
 		// spawn fire projectile at socket location of barrel
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
 			ProjectileBlueprint,
@@ -106,6 +128,8 @@ void UTankAimingComponent::Fire()
 
 		Projectile->LaunchProjectile(LaunchingSpeed);
 		LastFireTime = FPlatformTime::Seconds();
+		
+		
 	}
 
 }

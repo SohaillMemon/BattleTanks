@@ -42,17 +42,18 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintReadOnly, Category = "State")
-	EFiringState FiringState = EFiringState::Locked;
+	EFiringState FiringState = EFiringState::Reloading;
 
 	
 
 public:	
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
 private:
 	
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 	void MoveBarrelTowards(FVector AimDirection);
+	bool IsBarrelMoving();
 
 	UTankBarrel*Barrel = nullptr;
 	UTankBurret*Burret = nullptr;
@@ -68,4 +69,6 @@ private:
 
 
 	double LastFireTime = 0;
+	FVector AimDirection;
+	
 };
