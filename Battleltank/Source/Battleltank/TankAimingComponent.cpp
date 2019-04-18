@@ -8,13 +8,7 @@
 #include "Projectile.h"
 
 
-// Sets default values for this component's properties
-void UTankAimingComponent::Initialize(UTankBarrel*BarrelToSet, UTankBurret*BurretToSet)
-{
-	
-	Barrel = BarrelToSet;
-	Burret = BurretToSet;
-}
+
 
 UTankAimingComponent::UTankAimingComponent()
 {
@@ -32,6 +26,14 @@ void UTankAimingComponent::BeginPlay()
 	LastFireTime = FPlatformTime::Seconds();
 	// ...
 
+}
+
+// Sets default values for this component's properties
+void UTankAimingComponent::Initialize(UTankBarrel*BarrelToSet, UTankBurret*BurretToSet)
+{
+
+	Barrel = BarrelToSet;
+	Burret = BurretToSet;
 }
 
 void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
