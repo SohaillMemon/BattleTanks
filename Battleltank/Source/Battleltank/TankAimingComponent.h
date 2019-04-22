@@ -41,7 +41,7 @@ public:
 	EFiringState GetFiringState() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Firing")
-	int GetRoundsLeft() const;
+	int32 GetRoundsLeft() const;
 
 protected:
 	// Called when the game starts
@@ -77,6 +77,7 @@ private:
 	double LastFireTime = 0;
 	FVector AimDirection;
 
-	int RoundLeft = 3;
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	int32 RoundLeft = 3;
 	
 };
