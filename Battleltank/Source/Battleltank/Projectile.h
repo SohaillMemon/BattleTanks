@@ -2,10 +2,12 @@
 
 #pragma once
 
+#include "Runtime/Engine/Classes/PhysicsEngine/RadialForceComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Projectile.generated.h"
+
 
 UCLASS()
 class BATTLELTANK_API AProjectile : public AActor
@@ -21,8 +23,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	
 
 	void LaunchProjectile(float Speed);
 
@@ -34,5 +35,18 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UParticleSystemComponent* LaunchBlast = nullptr;
-	
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UParticleSystemComponent* ImpactBlast = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	URadialForceComponent* ExplosionForce = nullptr;
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	void OnTimeExpire();
+    
+	UPROPERTY(EditDefaultsOnly, Category= "Setup")
+	float DestroyDelay = 10.f;
 };
