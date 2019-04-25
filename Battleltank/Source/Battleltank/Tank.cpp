@@ -7,7 +7,7 @@
 ATank::ATank()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 }
 
@@ -15,6 +15,44 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay(); //needed for BP Begin Play to Run
 
+	if (GetHealthPercent() <= 0.4)
+	{
+		HealthBarColor = EHealthBar::HealthLow;
+	}
+
+	else
+	{
+		HealthBarColor = EHealthBar::HealthHigh;
+	}
+}
+
+void ATank::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+{
+	
 }
 
 
+float ATank::GetHealthPercent()
+{
+	return (float)CurrentHealth / (float)TotalHealth;
+}
+
+EHealthBar ATank::GetHealthBarColor() const
+{
+	return HealthBarColor;
+}
+
+
+float ATank::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
+{
+	int32 DamagePoint = FPlatformMath::RoundToInt(DamageAmount);
+	int32 DamageToApply = FMath::Clamp(DamagePoint, 0, CurrentHealth);
+
+	CurrentHealth -= DamageToApply;
+
+		if(CurrentHealth <= 0)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Tank Died"))
+		}
+	return DamageToApply;
+}
