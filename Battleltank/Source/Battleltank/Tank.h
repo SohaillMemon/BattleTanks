@@ -8,6 +8,8 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
+
+
 UENUM()
 enum class EHealthBar : uint8
 {
@@ -19,6 +21,7 @@ enum class EHealthBar : uint8
 class UTankBarrel; 
 class UTankBurret;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDelegate);
 
 UCLASS()
 class BATTLELTANK_API ATank : public APawn
@@ -34,6 +37,8 @@ public:
 
 	EHealthBar GetHealthBarColor() const;
 
+	FTankDelegate OnDeath;
+
 private:
 	// Sets default values for this pawn's properties
 	ATank();
@@ -45,7 +50,7 @@ private:
 	int32 TotalHealth = 100;
 	
 	UPROPERTY(VisibleAnywhere, Category = "Health")
-	int32 CurrentHealth = TotalHealth;
+	int32 CurrentHealth; 
 
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction);
 

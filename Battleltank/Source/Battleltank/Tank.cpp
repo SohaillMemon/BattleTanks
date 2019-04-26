@@ -14,7 +14,11 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay(); //needed for BP Begin Play to Run
+	CurrentHealth = TotalHealth;
+}
 
+void ATank::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+{
 	if (GetHealthPercent() <= 0.4)
 	{
 		HealthBarColor = EHealthBar::HealthLow;
@@ -24,11 +28,6 @@ void ATank::BeginPlay()
 	{
 		HealthBarColor = EHealthBar::HealthHigh;
 	}
-}
-
-void ATank::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
-{
-	
 }
 
 
@@ -52,7 +51,7 @@ float ATank::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEv
 
 		if(CurrentHealth <= 0)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Tank Died"))
+			OnDeath.Broadcast();
 		}
 	return DamageToApply;
 }
