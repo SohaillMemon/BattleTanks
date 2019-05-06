@@ -17,19 +17,6 @@ void ATank::BeginPlay()
 	CurrentHealth = TotalHealth;
 }
 
-void ATank::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
-{
-	if (GetHealthPercent() <= 0.4)
-	{
-		HealthBarColor = EHealthBar::HealthLow;
-	}
-
-	else
-	{
-		HealthBarColor = EHealthBar::HealthHigh;
-	}
-}
-
 
 float ATank::GetHealthPercent()
 {
@@ -48,8 +35,17 @@ float ATank::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEv
 	int32 DamageToApply = FMath::Clamp(DamagePoint, 0, CurrentHealth);
 
 	CurrentHealth -= DamageToApply;
+	if (GetHealthPercent() <= 0.4)
+	{
+		HealthBarColor = EHealthBar::HealthLow;
+	}
 
-		if(CurrentHealth <= 0)
+	else
+	{
+		HealthBarColor = EHealthBar::HealthHigh;
+	}
+	
+	if(CurrentHealth <= 0)
 		{
 			OnDeath.Broadcast();
 		}

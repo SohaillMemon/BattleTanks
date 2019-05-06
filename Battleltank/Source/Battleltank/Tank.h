@@ -52,8 +52,7 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Health")
 	int32 CurrentHealth; 
 
-	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction);
-
+	
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EHealthBar HealthBarColor = EHealthBar::HealthHigh;
